@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using SocketIO;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,20 +12,21 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        Events.OnTarget += OnTarget;
+        Events.OnDebbugText += OnDebbugText;
     }
     void OnDestroy()
     {
-        Events.OnTarget -= OnTarget;
+        Events.OnDebbugText -= OnDebbugText;
     }
-    void OnTarget(GameObject go, bool isOn)
+    void OnDebbugText(string text)
     {
-        isTracking = isOn;
+        field.text = text;
     }
     void Update()
     {
+        return;
         if (GameManager.Instance.state == GameManager.states.TARGET_ON)
-            field.text = ball.transform.localPosition.ToString();
+            field.text = ball.transform.localPosition.x + ", " + ball.transform.localPosition.z;
         else
             field.text = "NO";
     }

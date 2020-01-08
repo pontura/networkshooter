@@ -16,6 +16,6 @@ public class AAAAAAA : MonoBehaviour
     public void AAAAA()
     {      
         Data.Instance.url = field.text;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Login");
     }
 }

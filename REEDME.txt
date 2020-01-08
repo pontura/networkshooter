@@ -1,0 +1,5 @@
+Terminal abre la consola:
+nodemon index.js
+
+en casa:
+192.168.0.19

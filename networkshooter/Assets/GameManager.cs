@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public MeshRenderer targetBase;
+    public Transform ball;
     static GameManager mInstance = null;
 
     public states state;

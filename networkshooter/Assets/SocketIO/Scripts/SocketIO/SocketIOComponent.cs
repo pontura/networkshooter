@@ -92,6 +92,7 @@ namespace SocketIO
 		public void Awake()
 		{
             //pontura: para borrar:
+            if(!autoConnect)
             url = Data.Instance.url;
 
 

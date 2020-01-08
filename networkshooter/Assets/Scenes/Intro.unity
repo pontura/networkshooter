@@ -499,8 +499,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 96363768}
-  value: ws://192.168.1.60:52300/socket.io/?EIO=4&transport=websocket
-  value_default: ws://192.168.1.60:52300/socket.io/?EIO=4&transport=websocket
+  value: ws://192.168.0.19:52300/socket.io/?EIO=4&transport=websocket
+  value_default: ws://192.168.0.19:52300/socket.io/?EIO=4&transport=websocket
 --- !u!4 &1122916571
 Transform:
   m_ObjectHideFlags: 0
