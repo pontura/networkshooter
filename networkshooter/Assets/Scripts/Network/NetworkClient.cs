@@ -10,6 +10,9 @@ namespace SocketIO
 {
     public class NetworkClient : SocketIOComponent
     {
+        public Vector2 centerOffset;
+        public float offsetScale = 1;
+
         public Transform playersContainer;
         public NetworkIdentity playerToInstantiate;
         public InputField field;
@@ -24,8 +27,7 @@ namespace SocketIO
             SetupEvents();
             field.text = url;
             base.Start();
-            Initialize();
-            
+            Initialize();            
         }
         private void Initialize()
         {
@@ -69,20 +71,21 @@ namespace SocketIO
            );
             On("spawn", (E) =>
             {
-                AddPlayer(E.data["id"].ToString());
-               
+                AddPlayer(E.data["id"].ToString());               
             }
          );
             On("updatePosition", (E) =>
             {
-                
+                if (GameManager.Instance.type == GameManager.types.CLIENT)
+                    return;
                 string id = RemoveQuotes(E.data["id"].ToString());
-                Debug.Log("1 SUMA " + id);
-                float x = float.Parse(E.data["position"]["x"].ToString()) / 1000; // lo hace float;
-                float y = float.Parse(E.data["position"]["y"].ToString()) / 1000;
+                if (id == ClientID)
+                    return;
+                float x = offsetScale * ( centerOffset.x + float.Parse(E.data["position"]["x"].ToString()) / 1000); // lo hace float;
+                float y = offsetScale * ( centerOffset.y + float.Parse(E.data["position"]["y"].ToString()) / 1000);
                 NetworkIdentity ni = serverObjects[id];
-                ni.transform.position = new Vector3(x, y, 0);
-                Debug.Log("SUMA " + id + " x: " + x + " y: " + y);
+                ni.transform.position = new Vector3(x, 0, y);
+                //Debug.Log("SUMA " + id + " x: " + x + " y: " + y + " " + E.data["position"]["y"].ToString());
             }
          );
         }
@@ -106,11 +109,24 @@ namespace SocketIO
                 isPlayerAddedToScene = true;
             }
             DebbugText("AddPlayer " + id);
-            NetworkIdentity player = Instantiate(playerToInstantiate, playersContainer);
+            NetworkIdentity player;
+            if (GameManager.Instance.type == GameManager.types.SERVER)
+                player = Instantiate(playerToInstantiate, playersContainer);
+            else
+                player = new NetworkIdentity();
             player.SetControllerID (id);
             player.SetSocketReference(this);
             serverObjects.Add(id, player);
             Events.OnAddPlayer(player);
+        }
+        public NetworkIdentity GetNetworkIdentity()
+        {
+            if (ClientID == "")
+                return null;
+            NetworkIdentity ni  = serverObjects[ClientID];
+            if (ni != null)
+                return ni;
+            return null;
         }
     }
 

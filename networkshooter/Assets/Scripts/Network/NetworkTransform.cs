@@ -11,6 +11,8 @@ public class NetworkTransform : MonoBehaviour
     private float stillCounter = 0;
     private Player player;
 
+  
+
     void Start()
     {
         networkIdentity = GetComponent<NetworkIdentity>();
@@ -21,36 +23,41 @@ public class NetworkTransform : MonoBehaviour
         if (!networkIdentity.IsControlling())
             enabled = false;
     }
-    void Update()
-    {
-        if (GameManager.Instance == null || GameManager.Instance.state == GameManager.states.TARGET_OFF)
-            return;
-      if (networkIdentity.IsControlling())
-        { 
-            if (oldPosition != transform.position)
-            {
-                oldPosition = transform.position;
-                stillCounter = 0;
-                SendData();
-            }
-            else
-            {
-                stillCounter += Time.deltaTime;
-                if(stillCounter>= 1)
-                {
-                    stillCounter = 0;
-                   // SendData();
-                }
-            }
-      }
-    }
-    void SendData()
-    {
-        Vector3 pos = GameManager.Instance.ball.transform.position;
-        transform.position = new Vector3(pos.x, 0, pos.z);
-        player.position.x = Mathf.Round(transform.position.x * 1000); //* 1000.0f) / 1000.0f;
-        player.position.y = Mathf.Round(transform.position.y * 1000); // * 1000.0f) / 1000.0f;
-        networkIdentity.GetSocket().Emit("updatePosition", new JSONObject(JsonUtility.ToJson(player)));
-       // Events.OnDebbugText("x" + player.position.x);
-    }
+    //void Update()
+    //{
+
+    //    if (GameManager.Instance.type == GameManager.types.SERVER)
+    //        return;
+
+    //    ballPosition = GameManager.Instance.ball.transform.position;
+
+    //    if (networkIdentity.IsControlling())
+    //    { 
+    //        if (ballPosition != lastBallPosition)
+    //        {
+    //            lastBallPosition = ballPosition;
+    //            oldPosition = transform.position;
+    //            stillCounter = 0;
+    //            SendData();
+    //        }
+    //        else
+    //        {
+    //            stillCounter += Time.deltaTime;
+    //            if(stillCounter>= 1)
+    //            {
+    //                stillCounter = 0;
+    //                SendData();
+    //            }
+    //        }
+    //  }
+    //}
+    
+    //void SendData()
+    //{
+    //    smoothPos = Vector3.Lerp(ballPosition, smoothPos, 0.5f);
+    //    player.position.x = Mathf.Round(smoothPos.x * 1000); //* 1000.0f) / 1000.0f;
+    //    player.position.y = Mathf.Round(smoothPos.z * 1000); // * 1000.0f) / 1000.0f;
+    //    networkIdentity.GetSocket().Emit("updatePosition", new JSONObject(JsonUtility.ToJson(player)));
+    //    //print("x: " + pos.x + "y: " + pos.z);
+    //}
 }

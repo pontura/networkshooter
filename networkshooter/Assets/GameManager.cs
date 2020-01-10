@@ -8,11 +8,11 @@ public class GameManager : MonoBehaviour
     public Transform ball;
     static GameManager mInstance = null;
 
-    public states state;
-    public enum  states
+    public types type;
+    public enum types
     {
-        TARGET_OFF,
-        TARGET_ON
+        SERVER,
+        CLIENT
     }
 
     public static GameManager Instance
@@ -27,11 +27,5 @@ public class GameManager : MonoBehaviour
         if (!mInstance)
             mInstance = this;
     }
-    void Update()
-    {
-        if (state == states.TARGET_OFF && targetBase.enabled)
-            state = states.TARGET_ON;
-        else if (state == states.TARGET_ON && !targetBase.enabled)
-            state = states.TARGET_OFF;
-    }
+
 }

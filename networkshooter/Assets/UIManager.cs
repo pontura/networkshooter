@@ -22,12 +22,4 @@ public class UIManager : MonoBehaviour
     {
         field.text = text;
     }
-    void Update()
-    {
-        return;
-        if (GameManager.Instance.state == GameManager.states.TARGET_ON)
-            field.text = ball.transform.localPosition.x + ", " + ball.transform.localPosition.z;
-        else
-            field.text = "NO";
-    }
 }
