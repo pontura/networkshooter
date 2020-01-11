@@ -33,6 +33,10 @@ public class TargetToServer : MonoBehaviour
             player.position.x = player.position.y = 0;
         }
     }
+    public void SetCollisionPoint(Vector3 raycastHitPosition)
+    {
+        transform.position = raycastHitPosition;
+    }
     void Update()
     {
         if (player == null)
@@ -40,7 +44,7 @@ public class TargetToServer : MonoBehaviour
         if (GameManager.Instance.type == GameManager.types.SERVER)
             return;
 
-        ballPosition = GameManager.Instance.ball.transform.position;
+        ballPosition = transform.localPosition;
         
         if (ballPosition != lastBallPosition)
         {
@@ -65,6 +69,6 @@ public class TargetToServer : MonoBehaviour
         player.position.x = Mathf.Round(smoothPos.x * 1000); //* 1000.0f) / 1000.0f;
         player.position.y = Mathf.Round(smoothPos.z * 1000); // * 1000.0f) / 1000.0f;
         networkIdentity.GetSocket().Emit("updatePosition", new JSONObject(JsonUtility.ToJson(player)));
-        print("x: " + smoothPos.x + "y: " + smoothPos.z);
+      //  print("x: " + smoothPos.x + "y: " + smoothPos.z);
     }
 }

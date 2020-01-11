@@ -11,7 +11,7 @@ namespace SocketIO
     public class NetworkClient : SocketIOComponent
     {
         public Vector2 centerOffset;
-        public float offsetScale = 1;
+        public static float offsetScale = 0.4f;
 
         public Transform playersContainer;
         public NetworkIdentity playerToInstantiate;

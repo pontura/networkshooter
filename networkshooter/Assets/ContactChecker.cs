@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ContactChecker : MonoBehaviour
 {
-    public GameObject ball;
+    public TargetToServer targetToServer;
    
     void Update()
     {
@@ -21,7 +21,8 @@ public class ContactChecker : MonoBehaviour
         {
          //   Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
           //  Debug.Log("Did Hit " + ball.transform.localPosition);
-            ball.transform.localPosition = hit.point;
+           // ball.transform.localPosition = hit.point;
+            targetToServer.SetCollisionPoint(hit.point);
         }
         else
         {

@@ -7,39 +7,50 @@ public class FloorColliderForClient : MonoBehaviour
 {
     public GameObject targets;
     ImageTargetBehaviour[] allTargets;
-
+    public MeshRenderer[] meshes;
     void Start()
     {
         allTargets = targets.GetComponentsInChildren<ImageTargetBehaviour>();
+        print("meshes " + meshes.Length);
         Loop();
     }   
 
     void Loop()
     {
-        print("length: " + allTargets.Length);
         Vector3 pos = Vector3.zero;
-        Vector3 rot = Vector3.zero;
         Vector3 sc = Vector3.one;
+        Quaternion average = new Quaternion(0, 0, 0, 0);
         int total = 0;
-        foreach(ImageTargetBehaviour it in allTargets)
+        int id = 0;
+        ImageTargetBehaviour lastChecked = null;
+        bool CenterChecked = false;
+        foreach (ImageTargetBehaviour it in allTargets)
         {
-            if(it.transform.localEulerAngles != Vector3.zero)
+            id++;
+            if (meshes[id].enabled)
             {
-                pos += it.transform.localPosition;
-                rot += it.transform.rotation.eulerAngles;
-                sc += it.transform.localScale;
+                if(id == 3 & !CenterChecked)
+                {
+                    pos = it.transform.localPosition;
+                    sc = it.transform.localScale;
+
+                    transform.position = pos;
+                    transform.localScale = sc;
+                    CenterChecked = true;
+                }            
                 total++;
-            }
-        }
-        if(total > 1)
+                if (lastChecked != null)
+                    average = Quaternion.Slerp(it.transform.rotation, lastChecked.transform.rotation, 1 / (float)total);
+                else
+                    average = it.transform.rotation;
+                lastChecked = it;
+            }           
+        }           
+        if (total > 0)
         {
-            pos /= total;
-            rot /= total;
-            sc /= total;
+            transform.rotation = Quaternion.Slerp(transform.rotation, average, 0.05f);
         }
-        transform.position = pos;
-        transform.eulerAngles = rot;
-        transform.localScale = sc;
+        
         Invoke("Loop", 0.05f);
     }
 }

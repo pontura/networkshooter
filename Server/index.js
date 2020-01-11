@@ -28,7 +28,7 @@ io.on('connection',function (socket)
         }
         socket.on('updatePosition', function(data)
         {
-            console.log("x: " + data.position.x + " y: " + data.position.y);
+          //  console.log("x: " + data.position.x + " y: " + data.position.y);
             player.position.x = data.position.x;
             player.position.y = data.position.y;
            
