@@ -20,6 +20,7 @@ public class TargetToServer : MonoBehaviour
     private void OnDestroy()
     {
         Events.OnAddPlayer -= OnAddPlayer;
+      //  networkIdentity.GetSocket().Emit("disconnectPlayer", new JSONObject(JsonUtility.ToJson(NetworkClient.ClientID)));
     }
     void OnAddPlayer(NetworkIdentity ni)
     {
@@ -65,7 +66,7 @@ public class TargetToServer : MonoBehaviour
 
     void SendData()
     {
-        smoothPos = Vector3.Lerp(ballPosition, smoothPos, 0.5f);
+        smoothPos = Vector3.Lerp(ballPosition, smoothPos, 0.65f);
         player.position.x = Mathf.Round(smoothPos.x * 1000); //* 1000.0f) / 1000.0f;
         player.position.y = Mathf.Round(smoothPos.z * 1000); // * 1000.0f) / 1000.0f;
         networkIdentity.GetSocket().Emit("updatePosition", new JSONObject(JsonUtility.ToJson(player)));

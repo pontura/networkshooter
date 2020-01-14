@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Intro.unity
     guid: fdd6e21aa4c98c848a5bb18487fb06a8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Server.unity
     guid: 52875c7566c88e3409ee6045238a0835
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Tablet.unity
     guid: eca31270455396349bec964f2c817d18
   m_configObjects: {}

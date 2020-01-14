@@ -6,7 +6,7 @@ public class PlayersUI : MonoBehaviour
 {
     public PlayerUI playerUIToInstantiate;
     public Transform container;
-    List<PlayerUI> all;
+    public List<PlayerUI> all;
 
     private void Awake()
     {
@@ -27,6 +27,7 @@ public class PlayersUI : MonoBehaviour
     public void OnRemovePlayer(NetworkIdentity ni)
     {
         PlayerUI playerUI = null;
+        Debug.Log("Borra player " + ni.GetID());
         string userID = ni.GetID();
         foreach (PlayerUI p in all)
             if (p.userID == userID)
@@ -35,6 +36,7 @@ public class PlayersUI : MonoBehaviour
         {
             all.Remove(playerUI);
             Destroy(playerUI.gameObject);
+            Debug.Log("Destroy playerUI " + playerUI);
         }
     }
 }

@@ -10,7 +10,7 @@ io.on('connection',function (socket)
 
         var player = new Player();
         var thisPlayerid = player.id;
-
+        player.num = players.length;
         players[thisPlayerid] = player;
         sockets[thisPlayerid] = socket;
 
@@ -18,17 +18,27 @@ io.on('connection',function (socket)
         socket.emit("spawn", player); //me dice que yo spawnié
         socket.broadcast.emit("spawn", player);// le dice a los otros que entré
 
-        //te avisa a vos que entró otro:
-        for(var playerID in players)
+        //te avisa a vos que habia otros:
+        for(var otherPlayeID in players)
         {
-            if(playerID != thisPlayerid)
+            console.log("otro: " + otherPlayeID + " vos: " + thisPlayerid);
+            if(otherPlayeID != thisPlayerid)
             {
-                socket.emit("spawn", players[thisPlayerid]);
+                socket.emit("spawn", players[otherPlayeID]);
             }
         }
         socket.on('updatePosition', function(data)
         {
-          //  console.log("x: " + data.position.x + " y: " + data.position.y);
+            console.log("x: " + data.position.x + " y: " + data.position.y);
+            player.position.x = data.position.x;
+            player.position.y = data.position.y;
+           
+            socket.broadcast.emit("updatePosition", player);
+        })
+
+        socket.on('shoot', function(data)
+        {
+            console.log("x: " + data.position.x + " y: " + data.position.y);
             player.position.x = data.position.x;
             player.position.y = data.position.y;
            
@@ -37,7 +47,10 @@ io.on('connection',function (socket)
 
         socket.on('disconnect', function()
         {
-            console.log("disconnect");
+            console.log("disconnect " + thisPlayerid + thisPlayerid);
+            delete players[thisPlayerid];
+            delete sockets[thisPlayerid];
+            socket.broadcast.emit("disconnected", player);
         })
     }
 )

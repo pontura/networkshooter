@@ -59,16 +59,20 @@ namespace SocketIO
                     DebbugText("register " + ClientID);
                 }
             );
-            On("disconnect", (E) =>
+            On("disconnected", (E) =>
             {
                 string id = RemoveQuotes(E.data["id"].ToString());
-                loginPanel.SetActive(true);
+
                 DebbugText("disconnect " + id);
-                Destroy(serverObjects[id].gameObject);
+
+                if (id == ClientID)
+                    loginPanel.SetActive(true);
+                
+                // Destroy(serverObjects[id].gameObject);
                 Events.OnRemovePlayer(serverObjects[id]);
-                serverObjects.Remove(id);              
+                serverObjects.Remove(id);
             }
-           );
+          );
             On("spawn", (E) =>
             {
                 AddPlayer(E.data["id"].ToString());               
@@ -89,6 +93,7 @@ namespace SocketIO
             }
          );
         }
+        
         void DebbugText(string text)
         {
             Debug.Log(text);
