@@ -8,10 +8,12 @@ public class NetworkIdentity : MonoBehaviour
     [SerializeField]
     private string id;
     [SerializeField]
+    private int num;
+    [SerializeField]
     private bool isControlling;
 
     private SocketIOComponent socket;
-
+    public Player player;
 
     private void Awake()
     {
@@ -22,6 +24,10 @@ public class NetworkIdentity : MonoBehaviour
         this.id = ID;
         isControlling = (NetworkClient.ClientID == ID) ? true : false;
     }
+    public void SetNum(int _num)
+    {
+        this.num = _num;
+    }
     public void SetSocketReference(SocketIOComponent socket)
     {
         this.socket = socket;
@@ -29,6 +35,10 @@ public class NetworkIdentity : MonoBehaviour
     public string GetID()
     {
         return id;
+    }
+    public int GetNum()
+    {
+        return num;
     }
     public bool IsControlling()
     {

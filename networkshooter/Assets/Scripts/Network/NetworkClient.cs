@@ -10,11 +10,11 @@ namespace SocketIO
 {
     public class NetworkClient : SocketIOComponent
     {
-        public Vector2 centerOffset;
         public static float offsetScale = 0.4f;
+        public Vector2 aspectRatio;
 
         public Transform playersContainer;
-        public NetworkIdentity playerToInstantiate;
+        public NetworkIdentity networkIdentity_to_instantiate;
         public InputField field;
         private Dictionary<string, NetworkIdentity> serverObjects;
         public GameObject loginPanel;
@@ -75,21 +75,21 @@ namespace SocketIO
           );
             On("spawn", (E) =>
             {
-                AddPlayer(E.data["id"].ToString());               
+                DebbugText("spawn num: " + E.data["num"]);
+                AddPlayer(E.data["id"].ToString(), int.Parse(E.data["num"].ToString()));               
             }
          );
             On("updatePosition", (E) =>
             {
-                if (GameManager.Instance.type == GameManager.types.CLIENT)
+                if (Data.Instance.type == Data.types.CLIENT)
                     return;
                 string id = RemoveQuotes(E.data["id"].ToString());
                 if (id == ClientID)
                     return;
-                float x = offsetScale * ( centerOffset.x + float.Parse(E.data["position"]["x"].ToString()) / 1000); // lo hace float;
-                float y = offsetScale * ( centerOffset.y + float.Parse(E.data["position"]["y"].ToString()) / 1000);
+                float x = offsetScale * ( float.Parse(E.data["position"]["x"].ToString())); // lo hace float;
+                float y = offsetScale * ( float.Parse(E.data["position"]["y"].ToString()));
                 NetworkIdentity ni = serverObjects[id];
-                ni.transform.position = new Vector3(x, 0, y);
-                //Debug.Log("SUMA " + id + " x: " + x + " y: " + y + " " + E.data["position"]["y"].ToString());
+                ni.transform.position = new Vector3(x* aspectRatio.x, y*aspectRatio.y, 0)/1000;
             }
          );
         }
@@ -104,25 +104,47 @@ namespace SocketIO
             newText = t.Remove(0, 1);
             return newText.Remove(newText.Length - 1, 1);
         }
-        void AddPlayer(string text)
+        public NetworkIdentity networkIdentity;
+        
+        void AddPlayer(string text, int num)
         {
             string id = RemoveQuotes(text);
+            NetworkIdentity ni = null;
             if (id == ClientID)
             {
                 if (isPlayerAddedToScene)
                     return;
                 isPlayerAddedToScene = true;
+                ni = new NetworkIdentity();
+            } else if (Data.Instance.type == Data.types.SERVER)
+            {
+                ni = Instantiate(networkIdentity_to_instantiate);
+                ni.transform.SetParent(playersContainer);
             }
-            DebbugText("AddPlayer " + id);
-            NetworkIdentity player;
-            if (GameManager.Instance.type == GameManager.types.SERVER)
-                player = Instantiate(playerToInstantiate, playersContainer);
-            else
-                player = new NetworkIdentity();
-            player.SetControllerID (id);
-            player.SetSocketReference(this);
-            serverObjects.Add(id, player);
-            Events.OnAddPlayer(player);
+            print("serverObjects Count: " + ni);
+            if (ni == null)
+                return;
+            ni.SetNum(num);
+            ni.SetControllerID (id);
+            ni.SetSocketReference(this);
+            serverObjects.Add(id, ni);
+            OnAddPlayer(ni);
+            print("serverObjects Count: " + serverObjects.Count);
+        }
+        void OnAddPlayer(NetworkIdentity ni)
+        {           
+
+            print("ADD PLAYER " + ni.GetID() + " server id: " +  NetworkClient.ClientID);
+            
+            ni.player = new Player();
+            ni.player.position = new Position();
+            ni.player.position.x = ni.player.position.y = 0;
+
+            if (ni.GetID() == ClientID)
+                networkIdentity = ni;
+
+            if (Data.Instance.type == Data.types.SERVER)
+                Events.OnAddPlayer(ni);
         }
         public NetworkIdentity GetNetworkIdentity()
         {
@@ -140,6 +162,7 @@ namespace SocketIO
     {
         public string id;
         public Position position;
+        public int num;
     }
     [Serializable]
     public class Position

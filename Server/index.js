@@ -3,6 +3,7 @@ var Player = require('./Classes/Player.js');
 
 var players = [];
 var sockets = [];
+var id = 0;
 
 io.on('connection',function (socket)
     {
@@ -10,18 +11,23 @@ io.on('connection',function (socket)
 
         var player = new Player();
         var thisPlayerid = player.id;
-        player.num = players.length;
+        
         players[thisPlayerid] = player;
         sockets[thisPlayerid] = socket;
+
+        id++;
+
+        player.num = id;
 
         socket.emit("register", {id:thisPlayerid}); //tell only the client:
         socket.emit("spawn", player); //me dice que yo spawnié
         socket.broadcast.emit("spawn", player);// le dice a los otros que entré
 
+        console.log("player.num " + player.num + "   id : " + id);
+
         //te avisa a vos que habia otros:
         for(var otherPlayeID in players)
         {
-            console.log("otro: " + otherPlayeID + " vos: " + thisPlayerid);
             if(otherPlayeID != thisPlayerid)
             {
                 socket.emit("spawn", players[otherPlayeID]);
@@ -29,7 +35,7 @@ io.on('connection',function (socket)
         }
         socket.on('updatePosition', function(data)
         {
-            console.log("x: " + data.position.x + " y: " + data.position.y);
+           // console.log("x: " + data.position.x + " y: " + data.position.y);
             player.position.x = data.position.x;
             player.position.y = data.position.y;
            
@@ -38,11 +44,11 @@ io.on('connection',function (socket)
 
         socket.on('shoot', function(data)
         {
-            console.log("x: " + data.position.x + " y: " + data.position.y);
+           // console.log("shoot x: " + data.position.x + " y: " + data.position.y);
             player.position.x = data.position.x;
             player.position.y = data.position.y;
            
-            socket.broadcast.emit("updatePosition", player);
+            socket.broadcast.emit("shoot", player);
         })
 
         socket.on('disconnect', function()
