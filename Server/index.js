@@ -23,7 +23,7 @@ io.on('connection',function (socket)
         socket.emit("spawn", player); //me dice que yo spawnié
         socket.broadcast.emit("spawn", player);// le dice a los otros que entré
 
-        console.log("player.num " + player.num + "   id : " + id);
+        console.log("player.num " + player.num + "   thisPlayerid : " + thisPlayerid);
 
         //te avisa a vos que habia otros:
         for(var otherPlayeID in players)
@@ -53,7 +53,7 @@ io.on('connection',function (socket)
 
         socket.on('disconnect', function()
         {
-            console.log("disconnect " + thisPlayerid + thisPlayerid);
+            console.log("disconnect " + thisPlayerid);
             delete players[thisPlayerid];
             delete sockets[thisPlayerid];
             socket.broadcast.emit("disconnected", player);

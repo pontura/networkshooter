@@ -22,8 +22,9 @@ public class PadController : MonoBehaviour
     Vector3 lastNormalizedPoint;
     private void Update()
     {
-        if (networkClient.networkIdentity.player == null)
+        if (networkClient.networkIdentity == null || networkClient.networkIdentity.player == null)
             return;
+        print("CACA");
         if (state == states.IDLE)
         {
             target.SetActive(false);

@@ -69,7 +69,8 @@ namespace SocketIO
                     loginPanel.SetActive(true);
                 
                 // Destroy(serverObjects[id].gameObject);
-                Events.OnRemovePlayer(serverObjects[id]);
+                Events.OnRemovePlayer(serverObjects[id]);                
+                Destroy(serverObjects[id].gameObject);
                 serverObjects.Remove(id);
             }
           );
@@ -115,21 +116,21 @@ namespace SocketIO
                 if (isPlayerAddedToScene)
                     return;
                 isPlayerAddedToScene = true;
-                ni = new NetworkIdentity();
-            } else if (Data.Instance.type == Data.types.SERVER)
-            {
+              //  ni = new NetworkIdentity();
+            //    print("ASDASDASDA " + ni);
+            }
+            //else if (Data.Instance.type == Data.types.SERVER)
+            //{
                 ni = Instantiate(networkIdentity_to_instantiate);
                 ni.transform.SetParent(playersContainer);
-            }
-            print("serverObjects Count: " + ni);
-            if (ni == null)
-                return;
+           // }
+          //  if (ni == null)
+        //        return;
             ni.SetNum(num);
             ni.SetControllerID (id);
             ni.SetSocketReference(this);
             serverObjects.Add(id, ni);
             OnAddPlayer(ni);
-            print("serverObjects Count: " + serverObjects.Count);
         }
         void OnAddPlayer(NetworkIdentity ni)
         {           

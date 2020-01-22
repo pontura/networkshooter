@@ -454,9 +454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6900999a63b11ae47b359daec3ba1177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  url1: ws://
+  url2: :52300/socket.io/?EIO=4&transport=websocket
   field: {fileID: 96363768}
-  value: ws://192.168.0.19:52300/socket.io/?EIO=4&transport=websocket
-  value_default: ws://192.168.0.19:52300/socket.io/?EIO=4&transport=websocket
 --- !u!4 &1122916571
 Transform:
   m_ObjectHideFlags: 0
@@ -693,6 +693,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5807178504555379922, guid: e30f6b29bdf0cc340bbf87010ab69d8c,
+        type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e30f6b29bdf0cc340bbf87010ab69d8c, type: 3}
 --- !u!1 &1756502051
@@ -778,7 +783,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1122616572}
-        m_MethodName: AAAAA
+        m_MethodName: Init
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
